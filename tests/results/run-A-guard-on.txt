@@ -1,0 +1,56 @@
+﻿
+> college-event-booking@1.0.0 harness
+> node tests/harness.js
+
+
+=== Scenario 1: 500 concurrent bookings for 100 seats (GUARD=on) ===
+  500 requests finished in 405 ms
+  Response tally:
+     100 x 201 BOOKED
+     400 x 409 SOLD_OUT
+  PASS  201 responses: expected 100, got 100
+  PASS  409 responses: expected 400, got 400
+  PASS  409 all SOLD_OUT: expected 400, got 400
+  PASS  500 responses: expected 0, got 0
+  PASS  events.seats_taken: expected 100, got 100
+  PASS  COUNT(bookings): expected 100, got 100
+
+=== Scenario 5: last-seat race, 10 rounds (100 seats, 99 booked, 2 students book the last one at once) ===
+  Response tally:
+      10 x 201 BOOKED
+      10 x 409 SOLD_OUT
+  PASS  rounds with exactly one winner (one 201): expected 10, got 10
+  PASS  rounds where seats_taken == capacity == COUNT(bookings): expected 10, got 10
+  PASS  losers got a clean 409 SOLD_OUT: expected 10, got 10
+  PASS  500 responses: expected 0, got 0
+
+=== Scenario 2: cancellation race (100 users cancel at once + 9 duplicate cancels from user #1) ===
+  Response tally:
+     100 x 200 CANCELLED
+       9 x 404 BOOKING_NOT_FOUND
+  PASS  200 responses: expected 100, got 100
+  PASS  404 responses (duplicates): expected 9, got 9
+  PASS  500 responses: expected 0, got 0
+  PASS  events.seats_taken: expected 0, got 0
+  PASS  COUNT(bookings): expected 0, got 0
+  PASS  students with active_bookings != 0: expected 0, got 0
+
+=== Scenario 3: waitlist promotion (cap 10, 10 booked, 15 waiting, 10 cancel at once) ===
+  Response tally:
+      10 x 200 CANCELLED
+  PASS  200 responses: expected 10, got 10
+  PASS  500 responses: expected 0, got 0
+  PASS  events.seats_taken (still full): expected 10, got 10
+  PASS  seat holders are exactly the first 10 in the queue 
+  PASS  people still on waitlist: expected 5, got 5
+
+=== Scenario 4: per-student limit (1 student, 10 concurrent bookings on 10 events, limit 3) ===
+  Response tally:
+       3 x 201 BOOKED
+       7 x 409 LIMIT_REACHED
+  PASS  201 responses: expected 3, got 3
+  PASS  409 LIMIT_REACHED: expected 7, got 7
+  PASS  500 responses: expected 0, got 0
+  PASS  users.active_bookings: expected 3, got 3
+
+ALL CHECKS PASSED

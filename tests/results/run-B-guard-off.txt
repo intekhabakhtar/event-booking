@@ -1,0 +1,26 @@
+﻿
+> college-event-booking@1.0.0 harness
+> node tests/harness.js
+
+
+=== Scenario 1: 500 concurrent bookings for 100 seats (GUARD=OFF) ===
+  500 requests finished in 388 ms
+  Response tally:
+     100 x 201 BOOKED
+     400 x 500 CONSTRAINT_VIOLATION
+  (guard removed: some requests may fail with CHECK violations - the DATA must still be correct)
+  INFO  400 requests were stopped by the database CHECK constraint
+  PASS  seats_taken <= capacity (100 <= 100)
+  PASS  seats_taken == COUNT(bookings): expected 100, got 100
+  PASS  seats_taken == number of 201s: expected 100, got 100
+  PASS  no network errors 
+
+=== Scenario 5: last-seat race, 10 rounds (100 seats, 99 booked, 2 students book the last one at once) ===
+  Response tally:
+      10 x 201 BOOKED
+      10 x 500 CONSTRAINT_VIOLATION
+  PASS  rounds with exactly one winner (one 201): expected 10, got 10
+  PASS  rounds where seats_taken == capacity == COUNT(bookings): expected 10, got 10
+  INFO  10 losing requests were stopped by the database CHECK constraint
+
+ALL CHECKS PASSED
