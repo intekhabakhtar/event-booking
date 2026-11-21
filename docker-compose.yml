@@ -1,0 +1,24 @@
+# One command to run everything:  docker compose up --build
+# Then (first time only):         docker compose exec app node db/setup.js
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: event_booking
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d event_booking"]
+      interval: 5s
+      retries: 10
+  app:
+    build: .
+    ports: ["3000:3000"]
+    depends_on:
+      db: { condition: service_healthy }
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/event_booking
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in a .env file next to docker-compose.yml}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
+volumes:
+  pgdata:
