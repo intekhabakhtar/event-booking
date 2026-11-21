@@ -5,15 +5,34 @@
   "main": "src/server.js",
   "scripts": {
     "setup": "node db/setup.js",
+    "seed": "node db/seed.js",
     "start": "node src/server.js",
-    "harness": "node tests/harness.js"
+    "dev": "node --watch src/server.js",
+    "build": "npm --prefix client run build",
+    "dev:client": "npm --prefix client run dev",
+    "install:all": "npm install && npm --prefix client install",
+    "harness": "node tests/harness.js",
+    "explain": "node db/explain.js",
+    "test": "jest --runInBand --forceExit"
   },
-  "engines": { "node": ">=18" },
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.11.5"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ]
   }
 }
