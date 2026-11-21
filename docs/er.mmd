@@ -1,0 +1,34 @@
+erDiagram
+  USERS ||--o{ BOOKINGS : makes
+  EVENTS ||--o{ BOOKINGS : has
+  USERS ||--o{ WAITLIST : joins
+  EVENTS ||--o{ WAITLIST : has
+  USERS {
+    int id PK
+    text name
+    text email UK
+    text password_hash
+    text role "student or admin"
+    int active_bookings "CHECK 0..3"
+  }
+  EVENTS {
+    int id PK
+    text title
+    text description
+    text venue
+    timestamptz event_date
+    int capacity "CHECK > 0"
+    int seats_taken "CHECK 0..capacity"
+  }
+  BOOKINGS {
+    int id PK
+    int user_id FK
+    int event_id FK
+    timestamptz created_at
+  }
+  WAITLIST {
+    int id PK "id order = queue order"
+    int user_id FK
+    int event_id FK
+    timestamptz created_at
+  }
