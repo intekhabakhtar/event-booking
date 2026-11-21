@@ -24,8 +24,6 @@ once with the guard and once with the guard deliberately removed.
 Pages: Home, Events, Event Details (seat booking), My Bookings, Profile, Login, Register, and
 Admin: Dashboard, Manage Events, Create/Edit Event, Manage Bookings, Reports.
 
-> Course documents: [`PROPOSAL.md`](PROPOSAL.md) (the 3-question proposal) and [`docs/GUIDE_CHECKLIST.md`](docs/GUIDE_CHECKLIST.md) (every requirement of the course guide mapped to this project).
-
 ## Setup
 
 > **Upgrading from an older copy?** The database design changed (registration deadline + booking history table). Run `npm run setup` again to rebuild the tables (this deletes existing data), then `npm run seed`.
